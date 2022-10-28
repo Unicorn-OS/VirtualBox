@@ -1,13 +1,16 @@
 ---
+- name: Update packages. Solved most build errors for me.
+  ansible.builtin.dnf:
+    update_only: true
+  become: true
 
 - name: Install Linux kernel header files
   ansible.builtin.dnf:
     name:
+      - kernel-headers
       - kernel-devel
       - kernel-devel-matched-{{kernel_major_minor_ver}}
     state: latest
   become: true
 
-# - name: Get kernel version
-#   debug:
-#     msg: "Major minor: {{kernel_major_minor_ver}}"
+# FIX: https://ask.fedoraproject.org/t/issues-intalling-virtual-box/7595

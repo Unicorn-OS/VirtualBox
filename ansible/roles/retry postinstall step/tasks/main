@@ -1,0 +1,4 @@
+---
+- name: Retry building modules - VirtualBox postinstall step
+  become: true
+  command: /sbin/vboxconfig
