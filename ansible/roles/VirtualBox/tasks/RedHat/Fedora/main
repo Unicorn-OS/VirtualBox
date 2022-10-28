@@ -1,17 +1,15 @@
 ---
+# Some distro's like Fedora require kernel headers to install VirtualBox!
+- include_role:
+    name: Linux kernel header
 
-# Fedora beta requires overriding since one in Oracle repo is one OS version behind!
 
+# Fedora Beta requires overre since VirtualBox.org repo is one OS version behind!
 - name: If Fedora Beta? Set version one behind
   set_fact:
     fedora_download: "VirtualBox-{{major_vers}}-{{major_vers}}{{minor_vers}}_{{release_num}}_fedora{{ Fedora_Beta - 1 }}-1.{{ansible_architecture}}.rpm"
-    # fedora_checksum: "{{fedora36_checksum}}"
   when: ansible_distribution_major_version | int == Fedora_Beta
 
 - include_tasks: "{{role_path}}/tasks/common/download Virtualbox"
   vars:
     download_package: "{{fedora_download}}"
-    # download_checksum: "{{fedora_checksum}}"
-
-- debug:
-    msg: "{{fedora_download}}"

@@ -1,0 +1,6 @@
+---
+
+temp: "5.19.16-301.fc37.x86_64"
+
+
+kernel_major_minor_version: "{{ansible_kernel}}"
