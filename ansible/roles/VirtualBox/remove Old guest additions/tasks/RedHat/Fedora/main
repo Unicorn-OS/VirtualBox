@@ -1,7 +1,7 @@
 ---
 - name: Get stat is VirtualBox.pkg installed?
   ansible.builtin.stat:
-    path: {{dl_dir}}
+    path: "{{dl_dir}}"
   register: app
 
 
