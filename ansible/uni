@@ -1,8 +1,8 @@
 ---
 - hosts: local
   vars:
-    source: Oracle download
+    source: download
 
   roles:
-  - VirtualBox
+  - VirtualBox/{{source}}
   - retry postinstall step
