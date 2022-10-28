@@ -1,4 +1,4 @@
 ---
 dependencies:
 - Linux kernel header
-- Update Guest Additions
+- VirtualBox/remove Old guest additions

@@ -1,0 +1,13 @@
+---
+- name: Get stat is VirtualBox.pkg installed?
+  ansible.builtin.stat:
+    path: {{dl_dir}}
+  register: app
+
+
+- name: Remove OS default virtualbox-guest-additions
+  become: true
+  ansible.builtin.dnf:
+    name: virtualbox-guest-additions
+    state: absent
+  when: not (app.stat.isdir is defined and app.stat.isdir)

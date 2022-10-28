@@ -1,3 +1,10 @@
 ---
 # Automatically uses Sub-folders to contain distro specific scrips
 - include_tasks: '{{ ansible_os_family }}/{{ ansible_distribution }}/{{ ansible_distribution_major_version }}'
+
+- name: Add user to group vboxusers
+  become: true
+  ansible.builtin.user:
+    name: "{{ansible_user}}"
+    groups: vboxusers
+    append: yes

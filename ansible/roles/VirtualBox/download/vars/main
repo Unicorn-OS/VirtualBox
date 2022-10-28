@@ -3,8 +3,6 @@ Fedora_Beta: 37
 
 download_prefix: "https://download.virtualbox.org/virtualbox/{{major_vers}}{{minor_vers}}/"
 
-dl_dir: /var/uni/hyperion/app/virtualbox
-
 checksum_url: https://www.virtualbox.org/download/hashes/7.0.2/SHA256SUMS
 
 

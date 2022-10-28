@@ -1,0 +1,5 @@
+---
+dependencies:
+- VirtualBox/{{source}}
+- VirtualBox/update Guest Additions
+- VirtualBox/retry Building modules

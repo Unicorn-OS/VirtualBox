@@ -2,3 +2,4 @@
 - name: Retry building modules - VirtualBox postinstall step
   become: true
   command: /sbin/vboxconfig
+  when: todo_make_modules_idempotent

@@ -2,7 +2,7 @@
 - hosts: local
   vars:
     source: download
+    todo_make_modules_idempotent: true # Retry postinstall step
 
   roles:
-  - VirtualBox/{{source}}
-  - retry postinstall step
+  - VirtualBox/.default

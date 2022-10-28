@@ -1,4 +1,6 @@
 ---
+# Uni
+dl_dir: /var/uni/hyperion/app/virtualbox
 
 major_vers: "7.0"
 minor_vers: ".2"
