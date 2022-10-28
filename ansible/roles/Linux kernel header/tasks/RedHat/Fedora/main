@@ -1,22 +1,13 @@
 ---
-# - name: Install Linux kernel header files
-#   ansible.builtin.dnf:
-#     name:
-#       - kernel-devel
-#       - kernel-devel-matched-{{temp}}
-#     state: latest
-#   become: true
 
-# FIX This to strip off everything after the "major.minor" Kernel version! Then package will be found automatically.
+- name: Install Linux kernel header files
+  ansible.builtin.dnf:
+    name:
+      - kernel-devel
+      - kernel-devel-matched-{{kernel_major_minor_ver}}
+    state: latest
+  become: true
 
-# - name: Install Linux kernel header files
-#   ansible.builtin.dnf:
-#     name:
-#       - kernel-devel
-#       - kernel-devel-matched-{{kernel_major_minor_version}}
-#     state: latest
-#   become: true
-
-- name: Get kernel version
-  debug:
-    msg: "Major minor: {{ansible_kernel}}"
+# - name: Get kernel version
+#   debug:
+#     msg: "Major minor: {{kernel_major_minor_ver}}"
