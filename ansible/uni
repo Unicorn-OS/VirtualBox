@@ -1,0 +1,7 @@
+---
+- hosts: local
+  vars:
+    source: Oracle download
+
+  roles:
+  - VirtualBox

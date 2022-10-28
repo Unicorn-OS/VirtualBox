@@ -1,0 +1,22 @@
+---
+# https://www.virtualbox.org/wiki/Linux_Downloads
+
+- name: make dl directory
+  ansible.builtin.file:
+    path: "{{dl_dir}}"
+    state: directory
+    owner: "{{ansible_user}}"
+
+- name: Download VirtualBox Fedora
+  become: true
+  ansible.builtin.get_url:
+    url: "{{download_prefix}}{{download_package}}"
+    dest: "{{dl_dir}}/{{download_package}}"
+    checksum: "sha256:{{checksum_url}}"
+
+- name: Install VirtualBox from .rpm file
+  become: true
+  ansible.builtin.dnf:
+    name: "{{dl_dir}}/{{download_package}}"
+    state: present
+  when: false

@@ -1,0 +1,15 @@
+---
+Fedora_Beta: 37
+
+download_prefix: "https://download.virtualbox.org/virtualbox/{{major_vers}}{{minor_vers}}/"
+
+dl_dir: /var/uni/hyperion/app/virtualbox
+
+checksum_url: https://www.virtualbox.org/download/hashes/7.0.2/SHA256SUMS
+
+
+# sha256
+fedora35_checksum: f36591486e8b9ce79463754e66ba115dac80450fd2ca7cc225019b8a50f727e7
+fedora36_checksum: 893c10ad935dcc006f752b427c39e1533235e582cbc629cd864caf0704b15fcd
+
+#https://www.virtualbox.org/download/hashes/7.0.2/SHA256SUMS

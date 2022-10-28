@@ -1,0 +1,7 @@
+---
+
+major_vers: "7.0"
+minor_vers: ".2"
+release_num: 154219
+
+fedora_download: "VirtualBox-{{major_vers}}-{{major_vers}}{{minor_vers}}_{{release_num}}_fedora{{ ansible_distribution_major_version }}-1.{{ansible_architecture}}.rpm"
