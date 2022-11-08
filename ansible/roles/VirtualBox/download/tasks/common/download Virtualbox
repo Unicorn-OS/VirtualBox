@@ -14,10 +14,3 @@
     url: "{{download_prefix}}{{download_package}}"
     dest: "{{dl_dir}}/{{download_package}}"
     checksum: "sha256:{{checksum_url}}"
-
-- name: Install VirtualBox from .rpm file
-  become: true
-  ansible.builtin.dnf:
-    name: "{{dl_dir}}/{{download_package}}"
-    state: present
-  when: false

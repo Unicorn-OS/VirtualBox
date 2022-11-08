@@ -1,5 +1,16 @@
 ---
+
+- name: is kmod installed?
+  ansible.builtin.shell: |
+    if [ -f /lib/modules/`uname -r`/misc/vboxdrv.ko ]; then
+      echo True
+    else
+      echo False
+    fi
+  register: kmod
+
+
 - name: Retry building modules - VirtualBox postinstall step
   become: true
   command: /sbin/vboxconfig
-  when: todo_make_modules_idempotent
+  when: kmod.stdout == False

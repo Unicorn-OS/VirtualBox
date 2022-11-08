@@ -1,4 +1,11 @@
 ---
+# from: https://www.itzgeek.com/how-tos/linux/fedora-how-tos/install-virtualbox-on-fedora.html
+
+- name: Get stat of "machine owner" Key
+  become: true
+  ansible.builtin.stat:
+    path: "{{private_key}}"
+  register: key
 
 - name: Sign virtualbox kernel modules
   block:
@@ -17,15 +24,21 @@
     ansible.builtin.shell: openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=MSI/"
     args:
       chdir: /root/module-signing
-      creates: /root/module-signing/MOK.priv
-    notify: import the generated "Machine Owner key"
+      creates: "{{private_key}}"
 
   - name: Change permissions
     ansible.builtin.file:
-      path: /root/module-signing/MOK.priv
+      path: "{{private_key}}"
       owner: root
       group: root
       mode: '0600'
+
+  - name: import the generated "Machine Owner key"
+    become: true
+    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' mokutil --import /root/module-signing/MOK.der"
+    notify:
+      - Reboot and enroll MOK Key
+    # Todo: make this Idempotent!
 
   - name: Create a script to sign all the VirtualBox modules
     ansible.builtin.copy:
@@ -34,5 +47,23 @@
       owner: root
       group: root
       mode: '0700'
+    notify:
+      - Sign modules after reboot
 
+  when: not (key.stat.isreg is defined and key.stat.isreg)
   become: true
+
+
+# This step has to be done by hand, but Future: Make it use a KVM A.I. to manage UEFI!
+- debug:
+    msg: "MO Key password: {{mok_password}} !!!!!"
+
+- name: Reboot and enroll MOK Key, by hand
+  ansible.builtin.meta: flush_handlers
+
+- name: start the VirtualBox Linux kernel module
+  become: true
+  ansible.builtin.systemd:
+    name: vboxdrv
+    state: started
+    enabled: yes
