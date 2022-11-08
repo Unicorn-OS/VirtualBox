@@ -5,5 +5,7 @@
     force_build_modules: true
 
   roles:
-  # - VirtualBox/default
-  - Secure Boot/get Secure Boot
+  - VirtualBox/default
+
+# Testing:
+  # - Secure Boot/get Secure Boot

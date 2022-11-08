@@ -1,6 +1,9 @@
 ---
-# Some distro's like Fedora require kernel headers to install VirtualBox!
+# Secure Boot Key Signing
+- include_role:
+    name: Secure Boot/get Secure Boot
 
+# Some distro's like Fedora require kernel headers to install VirtualBox!
 # Pre-install Tasks
 - include_role:
     name: Linux kernel header
@@ -35,11 +38,3 @@
 # Post Install Steps / Fixes
 - include_role:
     name: VirtualBox/Fixes/update Guest Additions
-
-# Secure Boot Key Signing
-# - include_role:
-#     name: Secure Boot/get Secure Boot
-
-# Final Step
-# - include_role:
-#     name: VirtualBox/Fixes/Build modules
