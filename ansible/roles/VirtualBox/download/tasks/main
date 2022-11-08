@@ -8,3 +8,4 @@
     name: "{{ansible_user}}"
     groups: vboxusers
     append: yes
+  when: add_user_to_vboxusers

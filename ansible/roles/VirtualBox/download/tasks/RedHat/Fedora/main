@@ -2,11 +2,14 @@
 # Some distro's like Fedora require kernel headers to install VirtualBox!
 
 ## Moved to meta/dependencies Test!
-# - include_role:
-#     name: Linux kernel header
+- include_role:
+    name: Linux kernel header
+
+- include_role:
+    name: VirtualBox/Fixes/remove Old guest additions
 
 
-# Fedora Beta requires overre since VirtualBox.org repo is one OS version behind!
+# Fedora Beta requires overide since VirtualBox.org repo is one OS version behind!
 - name: If Fedora Beta? Set version one behind
   set_fact:
     fedora_download: "VirtualBox-{{major_vers}}-{{major_vers}}{{minor_vers}}_{{release_num}}_fedora{{ Fedora_Beta - 1 }}-1.{{ansible_architecture}}.rpm"
@@ -15,3 +18,10 @@
 - include_tasks: "{{role_path}}/tasks/common/download Virtualbox"
   vars:
     download_package: "{{fedora_download}}"
+
+# Post Install Steps / Fixes
+- include_role:
+    name: VirtualBox/Fixes/update Guest Additions
+
+- include_role:
+    name: VirtualBox/Fixes/retry Building modules

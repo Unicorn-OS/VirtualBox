@@ -1,4 +1,7 @@
 ---
+# May cause problems - Default is: True
+add_user_to_vboxusers: True
+
 # Uni
 dl_dir: /var/uni/hyperion/app/virtualbox
 
