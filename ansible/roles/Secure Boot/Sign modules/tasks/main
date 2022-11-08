@@ -1,1 +1,42 @@
 ---
+
+- name: Sign virtualbox kernel modules
+  block:
+  - name: Install openssl
+    ansible.builtin.dnf:
+      name:
+        - openssl
+      state: latest
+
+  - name: Create module-signing directory
+    ansible.builtin.file:
+      path: /root/module-signing
+      state: directory
+
+  - name: Create key pair
+    ansible.builtin.shell: openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=MSI/"
+    args:
+      chdir: /root/module-signing
+      creates: /root/module-signing/MOK.priv
+
+  - name: Change permissions
+    ansible.builtin.file:
+      path: /root/module-signing/MOK.priv
+      owner: root
+      group: root
+      mode: '0600'
+
+  - name: import the generated key
+    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' mokutil --import /root/module-signing/MOK.der --password"
+    # creates:
+
+  - name: Create a script to sign all the VirtualBox modules
+    ansible.builtin.file:
+      src: sign-vbox-modules
+      dest: /root/module-signing/sign-vbox-modules
+      owner: root
+      group: root
+      mode: '0700'
+      state: file
+
+  become: true

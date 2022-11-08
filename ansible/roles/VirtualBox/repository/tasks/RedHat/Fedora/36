@@ -21,16 +21,9 @@
     download_package: "{{fedora_download}}"
 
 
-
 # Post Install Steps / Fixes
 - include_role:
     name: VirtualBox/Fixes/update Guest Additions
 
 - include_role:
-    name: Secure Boot/get Secure Boot
-
-# Final Step
-- include_role:
     name: VirtualBox/Fixes/retry Building modules
-
-- include_tasks: "{{role_path}}/tasks/common/add user to group"

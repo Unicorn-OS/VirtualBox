@@ -5,5 +5,5 @@
     todo_make_modules_idempotent: true # Retry postinstall step
 
   roles:
-  - Secure Boot/get Secure Boot
   # - VirtualBox/default
+  - Secure Boot/get Secure Boot

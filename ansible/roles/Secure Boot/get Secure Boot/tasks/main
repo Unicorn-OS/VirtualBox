@@ -10,6 +10,6 @@
     fi
   register: is_secureboot
 
-- debug:
-    msg: "It's Secure"
+- include_role:
+    name: Secure Boot/Sign modules
   when: is_secureboot.stdout
