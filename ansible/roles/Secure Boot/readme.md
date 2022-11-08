@@ -5,3 +5,6 @@ them. Please see your Linux system's documentation for more information."
 
 # Guide
 https://gist.github.com/reillysiemens/ac6bea1e6c7684d62f544bd79b2182a4
+
+[UEFI Linux Secure Boot Kernel Signing and Verification demo](https://youtu.be/SQ7Ajv2Cnzg)
+- https://github.com/reachsameer911/UEFI_Secure_Boot
