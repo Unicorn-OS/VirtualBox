@@ -32,9 +32,12 @@
     name: "{{dl_dir}}/{{download_package}}"
     state: present
     disable_gpg_check: yes
+  notify: Reboot
 
 - include_tasks: "{{role_path}}/tasks/common/add user to group"
 
 # Post Install Steps / Fixes
 - include_role:
     name: VirtualBox/Fixes/update Guest Additions
+
+# Works after Reboot!
