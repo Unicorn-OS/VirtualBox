@@ -18,6 +18,7 @@
     args:
       chdir: /root/module-signing
       creates: /root/module-signing/MOK.priv
+    notify: import the generated "Machine Owner key"
 
   - name: Change permissions
     ansible.builtin.file:
@@ -26,17 +27,12 @@
       group: root
       mode: '0600'
 
-  - name: import the generated key
-    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' mokutil --import /root/module-signing/MOK.der --password"
-    # creates:
-
   - name: Create a script to sign all the VirtualBox modules
-    ansible.builtin.file:
+    ansible.builtin.copy:
       src: sign-vbox-modules
       dest: /root/module-signing/sign-vbox-modules
       owner: root
       group: root
       mode: '0700'
-      state: file
 
   become: true

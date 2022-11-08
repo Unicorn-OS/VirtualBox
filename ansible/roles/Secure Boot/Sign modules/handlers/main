@@ -1,0 +1,5 @@
+---
+
+- name: import the generated "Machine Owner key"
+  ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' mokutil --import /root/module-signing/MOK.der --password"
+  # creates: make this Idempotent!
