@@ -1,58 +1,25 @@
 ---
-# from: https://www.itzgeek.com/how-tos/linux/fedora-how-tos/install-virtualbox-on-fedora.html
+# From: `/sbin/vboxconfig` Help text!
 
-- name: Get stat of "machine owner" Key
+- name: Create module-signing directory
   become: true
-  ansible.builtin.stat:
-    path: "{{private_key}}"
-  register: key
+  ansible.builtin.file:
+    path: "{{key_dir}}"
+    state: directory
 
-- name: Sign virtualbox kernel modules
-  block:
-  - name: Install openssl
-    ansible.builtin.dnf:
-      name:
-        - openssl
-      state: latest
 
-  - name: Create module-signing directory
-    ansible.builtin.file:
-      path: /root/module-signing
-      state: directory
-
-  - name: Create key pair
-    ansible.builtin.shell: openssl req -new -x509 -newkey rsa:2048 -keyout MOK.priv -outform DER -out MOK.der -nodes -days 36500 -subj "/CN=MSI/"
-    args:
-      chdir: /root/module-signing
-      creates: "{{private_key}}"
-
-  - name: Change permissions
-    ansible.builtin.file:
-      path: "{{private_key}}"
-      owner: root
-      group: root
-      mode: '0600'
-
-  - name: import the generated "Machine Owner key"
-    become: true
-    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' | mokutil --import /root/module-signing/MOK.der"
-    notify:
-      - Reboot and enroll MOK Key
-    # Todo: make this Idempotent!
-
-  - name: Create a script to sign all the VirtualBox modules
-    ansible.builtin.copy:
-      src: sign-vbox-modules
-      dest: /root/module-signing/sign-vbox-modules
-      owner: root
-      group: root
-      mode: '0700'
-    notify:
-      - Sign modules after reboot
-
-  when: not (key.stat.isreg is defined and key.stat.isreg)
+- name: Create key pair
   become: true
+  ansible.builtin.shell: "openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -keyout {{key_dir}}/MOK.priv -out {{key_dir}}/MOK.der"
+  args:
+    chdir: "{{key_dir}}"
+    creates: "{{key_dir}}/MOK.der"
 
+- name: import the generated "Machine Owner key"
+  become: true
+  ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' | mokutil --import {{key_dir}}/MOK.der"
+  notify:
+    - Reboot and enroll MOK Key
 
 # This step has to be done by hand, but Future: Make it use a KVM A.I. to manage UEFI!
 - debug:
@@ -61,9 +28,9 @@
 - name: Reboot and enroll MOK Key, by hand
   ansible.builtin.meta: flush_handlers
 
-- name: start the VirtualBox Linux kernel module
+# After reboot:
+- name: Run rcvboxdrv setup to rebuild modules
   become: true
-  ansible.builtin.systemd:
-    name: vboxdrv
-    state: started
-    enabled: yes
+  ansible.builtin.command: rcvboxdrv setup
+  # args:
+  #   creates: /make_idempotent
