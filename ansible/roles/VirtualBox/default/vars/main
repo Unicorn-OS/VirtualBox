@@ -2,5 +2,5 @@
 
 dl_dir: /var/uni/hyperion/app/virtualbox
 
-# May cause problems: Disabling for now
-add_user_to_vboxusers: False
+# May cause problems: try Disabling
+add_user_to_vboxusers: True
