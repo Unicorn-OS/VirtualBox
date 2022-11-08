@@ -9,8 +9,17 @@
     name:
       - kernel-headers
       - kernel-devel
+    state: latest
+  become: true
+
+
+- name: Install Matched Linux kernel header files
+  ansible.builtin.dnf:
+    name:
       - kernel-devel-matched-{{kernel_major_minor_ver}}
     state: latest
   become: true
+  when: matched_kernel
+
 
 # FIX: https://ask.fedoraproject.org/t/issues-intalling-virtual-box/7595
