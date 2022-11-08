@@ -16,11 +16,19 @@
 - name: Install Matched Linux kernel header files
   ansible.builtin.dnf:
     name:
-      - kernel-devel-matched
       # - kernel-devel-matched-{{kernel_major_minor_ver}}
+      # - kernel-devel-matched
+      - kernel-devel-matched-5.19.16-301.fc37.x86_64
     state: latest
   become: true
   when: matched_kernel
+
+- debug:
+    msg: "Kernel................. {{kernel_major_minor_ver}}"
+
+# Worked:
+# - kernel-devel-matched-5.19.16-301.fc37.x86_64
+# For some reason, omitting "301" doesn't work?
 
 
 # FIX: https://ask.fedoraproject.org/t/issues-intalling-virtual-box/7595
