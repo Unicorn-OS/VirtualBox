@@ -2,7 +2,7 @@
 - hosts: fedora #, ubuntu, local
   vars:
     source: download
-    todo_make_modules_idempotent: true # Retry postinstall step
+    force_build_modules: true
 
   roles:
   - VirtualBox/default

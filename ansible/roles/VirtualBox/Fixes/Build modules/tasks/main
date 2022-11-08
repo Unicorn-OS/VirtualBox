@@ -13,4 +13,4 @@
 - name: Retry building modules - VirtualBox postinstall step
   become: true
   command: /sbin/vboxconfig
-  when: kmod.stdout == False
+  when: force_build_modules or (kmod.stdout == False)
