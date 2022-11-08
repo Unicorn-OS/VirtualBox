@@ -1,36 +1,45 @@
 ---
 # From: `/sbin/vboxconfig` Help text!
 
+- name: Install openssl
+  become: true
+  ansible.builtin.dnf:
+    name:
+      - openssl
+    state: latest
+
 - name: Create module-signing directory
   become: true
   ansible.builtin.file:
     path: "{{key_dir}}"
     state: directory
 
+- name: to Fix
+  block:
+  - name: Create key pair
+    become: true
+    ansible.builtin.shell: "echo -e '\n\n' | openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -keyout {{key_dir}}/MOK.priv -out {{key_dir}}/MOK.der"
+    args:
+      chdir: "{{key_dir}}"
+      creates: "{{key_dir}}/MOK.der"
 
-- name: Create key pair
-  become: true
-  ansible.builtin.shell: "openssl req -nodes -new -x509 -newkey rsa:2048 -outform DER -keyout {{key_dir}}/MOK.priv -out {{key_dir}}/MOK.der"
-  args:
-    chdir: "{{key_dir}}"
-    creates: "{{key_dir}}/MOK.der"
+  - name: import the generated "Machine Owner key"
+    become: true
+    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' | mokutil --import {{key_dir}}/MOK.der"
+    notify:
+      - Reboot and enroll MOK Key
 
-- name: import the generated "Machine Owner key"
-  become: true
-  ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' | mokutil --import {{key_dir}}/MOK.der"
-  notify:
-    - Reboot and enroll MOK Key
+  # This step has to be done by hand, but Future: Make it use a KVM A.I. to manage UEFI!
+  - debug:
+      msg: "MO Key password: {{mok_password}} !!!!!"
 
-# This step has to be done by hand, but Future: Make it use a KVM A.I. to manage UEFI!
-- debug:
-    msg: "MO Key password: {{mok_password}} !!!!!"
+  - name: Reboot and enroll MOK Key, by hand
+    ansible.builtin.meta: flush_handlers
 
-- name: Reboot and enroll MOK Key, by hand
-  ansible.builtin.meta: flush_handlers
-
-# After reboot:
-- name: Run rcvboxdrv setup to rebuild modules
-  become: true
-  ansible.builtin.command: rcvboxdrv setup
-  # args:
-  #   creates: /make_idempotent
+  # After reboot:
+  - name: Run rcvboxdrv setup to rebuild modules
+    become: true
+    ansible.builtin.command: rcvboxdrv setup
+    # args:
+    #   creates: /make_idempotent
+  when: false
