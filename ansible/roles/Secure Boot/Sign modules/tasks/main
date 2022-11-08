@@ -35,7 +35,7 @@
 
   - name: import the generated "Machine Owner key"
     become: true
-    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' mokutil --import /root/module-signing/MOK.der"
+    ansible.builtin.shell: "echo -e '{{mok_password}}\n{{mok_password}}' | mokutil --import /root/module-signing/MOK.der"
     notify:
       - Reboot and enroll MOK Key
     # Todo: make this Idempotent!
