@@ -1,8 +1,15 @@
 ---
 
 - name: Check if Secure Boot is enabled?
-  ansible.builtin.command: mokutil --sb-state
+  ansible.builtin.shell: |
+    get=`mokutil --sb-state`
+    if [ "$get" = "SecureBoot enabled" ];then
+      echo True
+    else
+      echo False
+    fi
   register: is_secureboot
 
 - debug:
-    msg: "{{is_secureboot}}"
+    msg: "It's Secure"
+  when: is_secureboot.stdout
